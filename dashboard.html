@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Present Simple | Mrs. Yael Caspi</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F0F4FF;
+  --white:#FFFFFF;
+  --blue-900:#0D1F6B;
+  --blue-800:#1435A8;
+  --blue-700:#1B4FD8;
+  --blue-600:#2563EB;
+  --blue-500:#3B82F6;
+  --blue-400:#60A5FA;
+  --blue-300:#93C5FD;
+  --blue-200:#BFDBFE;
+  --blue-100:#DBEAFE;
+  --blue-50:#EFF6FF;
+  --border:#D1E0FF;
+  --text:#0D1F6B;
+  --text-soft:#3B5499;
+  --muted:#7A96D4;
+  --green:#059669;
+  --green-light:#ECFDF5;
+  --red:#DC2626;
+  --red-light:#FEF2F2;
+  --yellow:#D97706;
+  --yellow-light:#FFFBEB;
+  --shadow-sm:0 1px 4px rgba(13,31,107,.08);
+  --shadow:0 4px 20px rgba(13,31,107,.10);
+  --r:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Heebo',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  direction:rtl;
+}
+
+/* ── HEADER ── */
+.header{
+  background:linear-gradient(135deg,var(--blue-800) 0%,var(--blue-600) 100%);
+  padding:0 36px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:14px;flex-wrap:wrap;
+  height:68px;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 16px rgba(13,31,107,.25);
+}
+.header-left{display:flex;align-items:center;gap:14px}
+.hdr-logo{
+  width:40px;height:40px;border-radius:11px;
+  background:rgba(255,255,255,.18);
+  border:1.5px solid rgba(255,255,255,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;
+}
+.hdr-t h1{font-size:1.1rem;font-weight:800;color:#fff;letter-spacing:.2px}
+.hdr-t p{font-size:.74rem;color:rgba(255,255,255,.72);margin-top:1px}
+.hdr-right{display:flex;gap:8px;align-items:center}
+.hbtn{
+  font-family:'Heebo',sans-serif;font-size:.78rem;font-weight:700;
+  padding:7px 14px;border-radius:50px;
+  cursor:pointer;transition:all .2s;border:none;
+  display:flex;align-items:center;gap:5px;
+}
+.hbtn-ghost{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25)}
+.hbtn-ghost:hover{background:rgba(255,255,255,.25)}
+.hbtn-danger{background:rgba(220,38,38,.25);color:#fca5a5;border:1px solid rgba(220,38,38,.35)}
+.hbtn-danger:hover{background:rgba(220,38,38,.4)}
+.live-badge{
+  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);
+  color:#fff;font-size:.74rem;font-weight:700;
+  padding:5px 13px;border-radius:50px;
+  display:flex;align-items:center;gap:6px;
+}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ── PAGE ── */
+main{padding:26px 32px;max-width:1280px;margin:0 auto}
+
+/* ── STATS ── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.scard{
+  background:var(--white);
+  border:1.5px solid var(--border);
+  border-radius:var(--r);
+  padding:20px 22px;
+  box-shadow:var(--shadow-sm);
+  position:relative;overflow:hidden;
+  transition:transform .2s,box-shadow .2s;
+}
+.scard:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.scard-accent{
+  position:absolute;top:0;right:0;
+  width:4px;height:100%;border-radius:0 var(--r) var(--r) 0;
+}
+.scard:nth-child(1) .scard-accent{background:var(--blue-600)}
+.scard:nth-child(2) .scard-accent{background:var(--green)}
+.scard:nth-child(3) .scard-accent{background:var(--yellow)}
+.scard:nth-child(4) .scard-accent{background:var(--red)}
+.sl{font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px}
+.sv{font-family:'Baloo 2',cursive;font-size:2.2rem;font-weight:800;line-height:1}
+.scard:nth-child(1) .sv{color:var(--blue-600)}
+.scard:nth-child(2) .sv{color:var(--green)}
+.scard:nth-child(3) .sv{color:var(--yellow)}
+.scard:nth-child(4) .sv{color:var(--red)}
+.ss{font-size:.74rem;color:var(--muted);margin-top:4px}
+
+/* ── INSIGHTS ── */
+.insights{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px}
+.chip{
+  background:var(--white);
+  border:1.5px solid var(--border);
+  border-radius:12px;
+  padding:11px 15px;
+  font-size:.82rem;
+  display:flex;align-items:center;gap:8px;
+  flex:1;min-width:210px;
+  box-shadow:var(--shadow-sm);
+}
+.chip-icon{font-size:1.1rem;flex-shrink:0}
+
+/* ── GRID ── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px}
+
+/* ── SECTION CARD ── */
+.section{
+  background:var(--white);
+  border:1.5px solid var(--border);
+  border-radius:var(--r);
+  overflow:hidden;
+  box-shadow:var(--shadow-sm);
+}
+.section-head{
+  padding:14px 20px;
+  border-bottom:1px solid var(--blue-50);
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--blue-50);
+}
+.section-title{font-size:.88rem;font-weight:800;color:var(--blue-900);display:flex;align-items:center;gap:7px}
+.section-body{padding:18px 20px}
+
+/* ── HEATMAP ── */
+.heatmap{display:flex;flex-direction:column;gap:7px}
+.hm-row{
+  display:grid;grid-template-columns:1fr 80px 90px;
+  gap:10px;align-items:center;
+  padding:8px 11px;
+  border-radius:10px;
+  background:var(--bg);
+  border:1px solid var(--border);
+  transition:background .15s;
+}
+.hm-row:hover{background:var(--blue-50)}
+.hm-q{font-size:.8rem;color:var(--text-soft);direction:ltr;text-align:right;line-height:1.3}
+.hm-bar-track{flex:1;background:var(--blue-100);border-radius:50px;height:5px;overflow:hidden}
+.hm-bar-fill{height:100%;border-radius:50px;transition:width .8s}
+.hm-pct{font-family:'Baloo 2',cursive;font-size:.8rem;font-weight:700;text-align:center;direction:ltr}
+.hm-badge{font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:20px;text-align:center;white-space:nowrap}
+.hm-hi{background:var(--red-light);color:var(--red)}
+.hm-mid{background:var(--yellow-light);color:var(--yellow)}
+.hm-lo{background:var(--green-light);color:var(--green)}
+.hm-zero{background:var(--blue-100);color:var(--blue-600)}
+
+/* ── PAGE BARS ── */
+.chart-bars{display:flex;flex-direction:column;gap:12px}
+.chart-row{display:flex;align-items:center;gap:12px}
+.chart-label{font-size:.8rem;color:var(--text-soft);width:120px;text-align:right;direction:ltr;flex-shrink:0}
+.chart-track{
+  flex:1;background:var(--blue-100);border-radius:50px;
+  height:28px;overflow:hidden;position:relative;
+}
+.chart-fill{
+  height:100%;border-radius:50px;
+  display:flex;align-items:center;padding-right:10px;
+  font-family:'Baloo 2',cursive;font-size:.78rem;font-weight:700;color:#fff;
+  justify-content:flex-end;
+  transition:width 1s cubic-bezier(.34,1.56,.64,1);
+  min-width:4px;
+}
+
+/* ── STUDENTS TABLE ── */
+.table-section{
+  background:var(--white);
+  border:1.5px solid var(--border);
+  border-radius:var(--r);
+  overflow:hidden;
+  box-shadow:var(--shadow-sm);
+  margin-bottom:20px;
+}
+.table-head{
+  padding:14px 20px;
+  border-bottom:1px solid var(--blue-50);
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--blue-50);
+  flex-wrap:wrap;gap:10px;
+}
+.table-title{font-size:.88rem;font-weight:800;color:var(--blue-900);display:flex;align-items:center;gap:7px}
+.table-count{font-size:.78rem;color:var(--muted);font-weight:600}
+table{width:100%;border-collapse:collapse}
+thead th{
+  background:var(--blue-50);
+  font-size:.68rem;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.6px;
+  padding:9px 14px;border-bottom:1px solid var(--border);
+  text-align:right;white-space:nowrap;
+}
+tbody tr{border-bottom:1px solid var(--blue-50);transition:background .12s;cursor:pointer}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--blue-50)}
+td{padding:11px 14px;font-size:.85rem;vertical-align:middle}
+.td-name{font-weight:700;display:flex;align-items:center;gap:9px}
+.avatar{
+  width:30px;height:30px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:.75rem;font-weight:800;color:#fff;flex-shrink:0;
+}
+.td-score{font-family:'Baloo 2',cursive;font-weight:800;font-size:1rem}
+.grade-pill{
+  display:inline-block;font-size:.72rem;font-weight:700;
+  padding:3px 10px;border-radius:20px;white-space:nowrap;
+}
+.gp-a{background:var(--green-light);color:var(--green)}
+.gp-b{background:var(--blue-100);color:var(--blue-600)}
+.gp-c{background:var(--yellow-light);color:var(--yellow)}
+.gp-d{background:var(--red-light);color:var(--red)}
+.td-date{color:var(--muted);font-size:.76rem}
+.q-dots{display:flex;flex-wrap:wrap;gap:3px;max-width:200px}
+.qdot{width:8px;height:8px;border-radius:2px}
+.qdot-ok{background:var(--green)}
+.qdot-bad{background:var(--red)}
+.qdot-na{background:var(--blue-100)}
+
+/* ── DETAIL PANEL ── */
+.detail-panel{
+  background:var(--blue-50);
+  border:1.5px solid var(--blue-200);
+  border-radius:14px;
+  padding:20px;
+  margin:0 16px 16px;
+  display:none;
+  animation:fadeIn .2s ease;
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.detail-panel.open{display:block}
+.dp-title{font-size:.88rem;font-weight:800;color:var(--blue-900);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.pages-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.page-block{
+  background:var(--white);
+  border:1.5px solid var(--border);
+  border-radius:11px;
+  padding:12px 10px;
+  text-align:center;
+}
+.pb-title{font-size:.66rem;color:var(--muted);font-weight:700;margin-bottom:7px;direction:ltr;line-height:1.3}
+.pb-score{font-family:'Baloo 2',cursive;font-size:1.45rem;font-weight:800}
+.pb-qs{margin-top:8px;display:flex;flex-wrap:wrap;gap:3px;justify-content:center}
+.pb-q{width:10px;height:10px;border-radius:3px}
+.pb-ok{background:var(--green)}
+.pb-bad{background:var(--red)}
+.pb-na{background:var(--blue-100)}
+
+/* ── LOADING/EMPTY ── */
+.loading,.empty{
+  text-align:center;padding:60px 20px;color:var(--muted);
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+}
+.spinner{
+  width:34px;height:34px;border:3px solid var(--blue-100);
+  border-top-color:var(--blue-500);border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty-icon{font-size:2.8rem;opacity:.4}
+.empty-text{font-size:.9rem;font-weight:600;line-height:1.6}
+
+@media(max-width:900px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .grid-2{grid-template-columns:1fr}
+  .pages-grid{grid-template-columns:repeat(3,1fr)}
+  main{padding:16px}
+  .header{padding:0 16px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="hdr-logo">📊</div>
+    <div class="hdr-t">
+      <h1>דשבורד מורה — Present Simple</h1>
+      <p>🏫 Nitzanim School &nbsp;·&nbsp; ✏️ Mrs. Yael Caspi &nbsp;·&nbsp; כיתה ו׳ אנגלית</p>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <button class="hbtn hbtn-danger" onclick="clearAllData()">🗑️ נקה נתונים</button>
+    <button class="hbtn hbtn-ghost" onclick="loadData()">🔄 רענן</button>
+    <div class="live-badge"><span class="live-dot"></span> Live</div>
+  </div>
+</div>
+
+<main>
+  <div id="loadingState" class="loading">
+    <div class="spinner"></div>
+    <div>טוען נתונים...</div>
+  </div>
+
+  <div id="mainContent" style="display:none">
+    <div class="stats" id="statsRow"></div>
+    <div class="insights" id="insightsRow"></div>
+
+    <div class="grid-2">
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title">🔥 שאלות הכי קשות</div>
+        </div>
+        <div class="section-body">
+          <div class="heatmap" id="heatmapContainer"></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title">📚 ביצועים לפי נושא</div>
+        </div>
+        <div class="section-body">
+          <div class="chart-bars" id="pageBreakdown"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-section">
+      <div class="table-head">
+        <div class="table-title">👩‍🎓 תלמידים</div>
+        <div class="table-count" id="studentCount"></div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>שם</th><th>ניקוד</th><th>ציון</th><th>פירוט</th><th>תאריך</th>
+          </tr>
+        </thead>
+        <tbody id="studentsBody"></tbody>
+      </table>
+      <div id="detailPanel" class="detail-panel">
+        <div class="dp-title" id="detailTitle">📋 פירוט</div>
+        <div class="pages-grid" id="detailPages"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="emptyState" class="empty" style="display:none">
+    <div class="empty-icon">📭</div>
+    <div class="empty-text">אין תוצאות עדיין.<br>שתפו את קישור המשחק עם התלמידים!</div>
+  </div>
+</main>
+
+<script>
+/* ── DATA ── */
+async function getAllResults(){
+  try{
+    const keys=await window.storage.list('result:',true);
+    if(!keys||!keys.keys||keys.keys.length===0) return [];
+    const records=[];
+    for(const k of keys.keys){
+      try{
+        const r=await window.storage.get(k,true);
+        if(r&&r.value) records.push(JSON.parse(r.value));
+      }catch(e){}
+    }
+    return records;
+  }catch(e){return []}
+}
+
+async function clearAllData(){
+  if(!confirm('למחוק את כל הנתונים?')) return;
+  try{
+    const keys=await window.storage.list('result:',true);
+    if(keys&&keys.keys){
+      for(const k of keys.keys){ try{await window.storage.delete(k,true)}catch(e){} }
+    }
+    loadData();
+  }catch(e){}
+}
+
+/* ── HELPERS ── */
+const AVATAR_COLORS=['#1B4FD8','#7C3AED','#0891B2','#059669','#D97706','#DC2626','#2563EB'];
+function avatarColor(name){let h=0;for(let c of name)h=(h+c.charCodeAt(0))%AVATAR_COLORS.length;return AVATAR_COLORS[h]}
+function gradeInfo(pct){
+  if(pct>=90)return{label:'מצטיין',cls:'gp-a'};
+  if(pct>=75)return{label:'טוב מאוד',cls:'gp-b'};
+  if(pct>=60)return{label:'טוב',cls:'gp-c'};
+  return{label:'לא מספיק',cls:'gp-d'};
+}
+function errClass(pct){ return pct>=50?'hm-hi':pct>=25?'hm-mid':pct>0?'hm-lo':'hm-zero' }
+function barGradient(pct){
+  if(pct>=80)return'linear-gradient(90deg,#059669,#34D399)';
+  if(pct>=60)return'linear-gradient(90deg,#2563EB,#60A5FA)';
+  return'linear-gradient(90deg,#DC2626,#FCA5A5)';
+}
+function fmtDate(iso){
+  const d=new Date(iso);
+  return d.toLocaleDateString('he-IL',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});
+}
+
+/* ── BUILD ── */
+function buildStats(records){
+  const n=records.length;
+  const avg=n>0?Math.round(records.reduce((s,r)=>s+r.grade,0)/n):0;
+  const perfect=records.filter(r=>r.grade===100).length;
+  const needs=records.filter(r=>r.grade<60).length;
+  document.getElementById('statsRow').innerHTML=`
+    <div class="scard"><div class="scard-accent"></div><div class="sl">תלמידים השלימו</div><div class="sv">${n}</div><div class="ss">הגשות סה״כ</div></div>
+    <div class="scard"><div class="scard-accent"></div><div class="sl">ממוצע כיתה</div><div class="sv">${avg}%</div><div class="ss">על 30 שאלות</div></div>
+    <div class="scard"><div class="scard-accent"></div><div class="sl">ציון מושלם</div><div class="sv">${perfect}</div><div class="ss">100% נכון</div></div>
+    <div class="scard"><div class="scard-accent"></div><div class="sl">זקוקים לתגבור</div><div class="sv">${needs}</div><div class="ss">מתחת ל-60%</div></div>
+  `;
+}
+
+function buildInsights(records){
+  if(!records.length){document.getElementById('insightsRow').innerHTML='';return}
+  const qMap={};
+  for(const rec of records){
+    for(const page of rec.pages){
+      for(const q of page.questions){
+        if(!qMap[q.sentence])qMap[q.sentence]={total:0,errors:0};
+        if(q.answered!==null){qMap[q.sentence].total++;if(!q.isCorrect)qMap[q.sentence].errors++;}
+      }
+    }
+  }
+  const qs=Object.entries(qMap).filter(([,v])=>v.total>0)
+    .map(([s,v])=>({s,pct:Math.round(v.errors/v.total*100)}));
+  qs.sort((a,b)=>b.pct-a.pct);
+  const hardest=qs[0],easiest=qs[qs.length-1];
+  const top=records.reduce((a,b)=>a.grade>b.grade?a:b);
+  const needs=records.filter(r=>r.grade<60);
+  const avg=Math.round(records.reduce((s,r)=>s+r.grade,0)/records.length);
+
+  document.getElementById('insightsRow').innerHTML=`
+    ${hardest?`<div class="chip"><span class="chip-icon">🔴</span><span>הכי קשה: <strong style="color:var(--red)">${hardest.pct}% טעו</strong> — "${hardest.s.slice(0,40)}"</span></div>`:''}
+    ${easiest?`<div class="chip"><span class="chip-icon">🟢</span><span>הכי קל: <strong style="color:var(--green)">${100-easiest.pct}% הצליחו</strong> — "${easiest.s.slice(0,38)}"</span></div>`:''}
+    <div class="chip"><span class="chip-icon">🏆</span><span>מוביל הכיתה: <strong style="color:var(--blue-700)">${top.name}</strong> — ${top.grade}%</span></div>
+    <div class="chip"><span class="chip-icon">📊</span><span>ממוצע כיתה: <strong style="color:var(--blue-700)">${avg}%</strong>${needs.length?` · <span style="color:var(--red)">${needs.length} זקוקים לתגבור</span>`:''}</span></div>
+  `;
+}
+
+function buildHeatmap(records){
+  const qMap={};
+  for(const rec of records){
+    for(const page of rec.pages){
+      for(const q of page.questions){
+        if(!qMap[q.sentence])qMap[q.sentence]={sentence:q.sentence,total:0,errors:0};
+        if(q.answered!==null){qMap[q.sentence].total++;if(!q.isCorrect)qMap[q.sentence].errors++;}
+      }
+    }
+  }
+  const qs=Object.values(qMap).filter(q=>q.total>0);
+  qs.sort((a,b)=>(b.errors/b.total)-(a.errors/a.total));
+  const container=document.getElementById('heatmapContainer');
+  if(!qs.length){container.innerHTML='<div style="color:var(--muted);text-align:center;padding:20px;font-size:.85rem">אין נתונים</div>';return}
+  container.innerHTML='';
+  for(const q of qs.slice(0,14)){
+    const ep=Math.round(q.errors/q.total*100);
+    const cls=errClass(ep);
+    const row=document.createElement('div');
+    row.className='hm-row';
+    row.innerHTML=`
+      <div class="hm-q">${q.sentence.length>52?q.sentence.slice(0,52)+'…':q.sentence}</div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <div class="hm-bar-track" style="flex:1"><div class="hm-bar-fill" style="width:${ep}%;background:${ep>=50?'var(--red)':ep>=25?'var(--yellow)':'var(--green)'}"></div></div>
+        <span class="hm-pct" style="color:${ep>=50?'var(--red)':ep>=25?'var(--yellow)':'var(--green)'}">${ep}%</span>
+      </div>
+      <div class="hm-badge ${cls}">${ep>=50?'⚠️ קשה':ep>=25?'متوسط':ep>0?'✓ בסדר':'✓ קל'}</div>
+    `;
+    container.appendChild(row);
+  }
+}
+
+function buildPageBreakdown(records){
+  const titles=['WH Questions',"Don't/Doesn't",'Possessive','Mixed Neg.','Challenge'];
+  const pageStats=titles.map((title,pi)=>{
+    let correct=0,total=0;
+    for(const rec of records){
+      if(rec.pages&&rec.pages[pi]){
+        for(const q of rec.pages[pi].questions){
+          if(q.answered!==null){total++;if(q.isCorrect)correct++;}
+        }
+      }
+    }
+    return{title,pct:total>0?Math.round(correct/total*100):0};
+  });
+  const container=document.getElementById('pageBreakdown');
+  container.innerHTML='';
+  for(const ps of pageStats){
+    const div=document.createElement('div');
+    div.className='chart-row';
+    div.innerHTML=`
+      <div class="chart-label">${ps.title}</div>
+      <div class="chart-track">
+        <div class="chart-fill" style="width:${ps.pct}%;background:${barGradient(ps.pct)}">${ps.pct>15?ps.pct+'%':''}</div>
+      </div>
+    `;
+    container.appendChild(div);
+  }
+}
+
+let openStudent=null;
+function buildStudentsTable(records){
+  document.getElementById('studentCount').textContent=`${records.length} תלמידים`;
+  const tbody=document.getElementById('studentsBody');
+  tbody.innerHTML='';
+  const sorted=[...records].sort((a,b)=>b.grade-a.grade);
+  for(const rec of sorted){
+    const g=gradeInfo(rec.grade);
+    const initial=rec.name?rec.name[0].toUpperCase():'?';
+    const color=avatarColor(rec.name||'');
+    const allQs=(rec.pages||[]).flatMap(p=>p.questions);
+    const dots=allQs.map(q=>`<div class="qdot ${q.answered===null?'qdot-na':q.isCorrect?'qdot-ok':'qdot-bad'}"></div>`).join('');
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td class="td-name"><div class="avatar" style="background:${color}">${initial}</div>${rec.name||'—'}</td>
+      <td class="td-score" style="color:${rec.grade>=80?'var(--green)':rec.grade>=60?'var(--blue-600)':'var(--red)'}">${rec.score}/${rec.total}</td>
+      <td><span class="grade-pill ${g.cls}">${g.label} (${rec.grade}%)</span></td>
+      <td><div class="q-dots">${dots}</div></td>
+      <td class="td-date">${fmtDate(rec.date)}</td>
+    `;
+    tr.onclick=()=>toggleDetail(rec);
+    tbody.appendChild(tr);
+  }
+}
+
+function toggleDetail(rec){
+  const panel=document.getElementById('detailPanel');
+  if(openStudent===rec.name&&panel.classList.contains('open')){
+    panel.classList.remove('open');openStudent=null;return;
+  }
+  openStudent=rec.name;
+  panel.classList.add('open');
+  document.getElementById('detailTitle').textContent=`📋 פירוט: ${rec.name}`;
+  const container=document.getElementById('detailPages');
+  container.innerHTML='';
+  for(const page of (rec.pages||[])){
+    const correct=page.questions.filter(q=>q.isCorrect).length;
+    const total=page.questions.length;
+    const pct=Math.round(correct/total*100);
+    const shortTitle=page.title.replace('Worksheet ','W').split('—')[0].trim();
+    const qDots=page.questions.map(q=>`<div class="pb-q ${q.answered===null?'pb-na':q.isCorrect?'pb-ok':'pb-bad'}" title="${q.sentence}: ${q.answered||'—'} (✓ ${q.correct})"></div>`).join('');
+    const block=document.createElement('div');
+    block.className='page-block';
+    block.innerHTML=`
+      <div class="pb-title">${shortTitle}</div>
+      <div class="pb-score" style="color:${pct>=80?'var(--green)':pct>=60?'var(--blue-600)':'var(--red)'}">${correct}/${total}</div>
+      <div class="pb-qs">${qDots}</div>
+    `;
+    container.appendChild(block);
+  }
+  setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'nearest'}),100);
+}
+
+async function loadData(){
+  document.getElementById('loadingState').style.display='flex';
+  document.getElementById('mainContent').style.display='none';
+  document.getElementById('emptyState').style.display='none';
+  const records=await getAllResults();
+  document.getElementById('loadingState').style.display='none';
+  if(!records.length){document.getElementById('emptyState').style.display='flex';return}
+  document.getElementById('mainContent').style.display='block';
+  buildStats(records);
+  buildInsights(records);
+  buildHeatmap(records);
+  buildPageBreakdown(records);
+  buildStudentsTable(records);
+}
+
+loadData();
+setInterval(loadData,30000);
+</script>
+</body>
+</html>

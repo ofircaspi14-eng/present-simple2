@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Present Simple Questions — Nitzanim School</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1B2B5E;
+  --blue: #2E5BFF;
+  --sky: #5BC8FF;
+  --mint: #00D4A8;
+  --coral: #FF6B6B;
+  --yellow: #FFD93D;
+  --purple: #9B5DE5;
+  --white: #FFFFFF;
+  --card-bg: rgba(255,255,255,0.97);
+  --shadow: 0 8px 32px rgba(27,43,94,0.13);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Nunito',sans-serif;
+  min-height:100vh;
+  background: #eef2ff;
+  background-image:
+    radial-gradient(circle at 15% 20%, #c7d7ff 0%, transparent 40%),
+    radial-gradient(circle at 85% 10%, #ffd6f0 0%, transparent 35%),
+    radial-gradient(circle at 50% 80%, #d0f5e8 0%, transparent 40%),
+    radial-gradient(circle at 90% 70%, #fff0c4 0%, transparent 35%);
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* ── ANIMATED BACKGROUND ── */
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bubble{position:absolute;border-radius:50%;opacity:.12;animation:float-up linear infinite}
+@keyframes float-up{0%{transform:translateY(110vh) scale(0.5)}100%{transform:translateY(-20vh) scale(1.2)}}
+.grid-lines{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.06;background-image:linear-gradient(#6080ff 1px,transparent 1px),linear-gradient(90deg,#6080ff 1px,transparent 1px);background-size:40px 40px}
+
+/* ── HEADER ── */
+.top-bar{
+  position:relative;z-index:10;
+  background:rgba(255,255,255,.85);
+  backdrop-filter:blur(20px);
+  border:2px solid rgba(46,91,255,.12);
+  box-shadow:0 4px 20px rgba(46,91,255,.10);
+  padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+}
+.school-info{display:flex;flex-direction:column;gap:2px}
+.school-name{font-family:'Baloo 2',cursive;font-size:.85rem;font-weight:700;color:var(--blue);letter-spacing:.5px;text-transform:uppercase}
+.teacher-name{font-size:.78rem;color:#6b7aa8;font-weight:600}
+.page-indicator{display:flex;gap:6px;align-items:center}
+.page-dot{width:10px;height:10px;border-radius:50%;background:#c8d5f8;transition:all .3s;cursor:default}
+.page-dot.active{background:var(--blue);transform:scale(1.4);box-shadow:0 0 8px var(--blue)}
+.page-dot.done{background:var(--mint)}
+
+/* ── MAIN CONTAINER ── */
+#app{position:relative;z-index:5;padding:24px 16px 100px;display:flex;flex-direction:column;align-items:center;min-height:100vh}
+
+/* ── WORKSHEET CARD ── */
+.worksheet{
+  width:100%;max-width:860px;
+  background:var(--card-bg);
+  border-radius:28px;
+  box-shadow:var(--shadow),0 0 0 3px rgba(91,200,255,.15);
+  overflow:hidden;
+  animation:slide-in .4s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes slide-in{0%{transform:translateY(30px);opacity:0}100%{transform:translateY(0);opacity:1}}
+
+.ws-header{
+  background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%);
+  padding:22px 28px 18px;
+  position:relative;overflow:hidden;
+}
+.ws-header::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.06)}
+.ws-header::after{content:'';position:absolute;bottom:-30px;left:60px;width:100px;height:100px;border-radius:50%;background:rgba(91,200,255,.08)}
+.ws-title{font-family:'Baloo 2',cursive;font-size:clamp(1.4rem,3.5vw,2rem);font-weight:800;color:#fff;letter-spacing:.5px;position:relative;z-index:1}
+.ws-subtitle{font-size:.9rem;color:rgba(255,255,255,.75);margin-top:3px;position:relative;z-index:1;font-weight:600}
+.ws-meta{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;position:relative;z-index:1}
+.ws-badge{background:rgba(255,255,255,.12);color:#fff;font-size:.78rem;font-weight:700;padding:4px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.2)}
+.ws-badge.level{background:var(--yellow);color:var(--navy)}
+
+.ws-body{padding:24px 28px}
+.ws-instruction{
+  background:linear-gradient(135deg,#f0f7ff,#e8f4fd);
+  border-left:4px solid var(--blue);
+  border-radius:0 12px 12px 0;
+  padding:12px 16px;
+  font-size:.92rem;font-weight:700;color:var(--navy);
+  margin-bottom:22px;
+  display:flex;align-items:center;gap:10px;
+}
+.ws-instruction .inst-icon{font-size:1.3rem}
+
+/* ── QUESTIONS ── */
+.questions-list{display:flex;flex-direction:column;gap:14px}
+.q-item{
+  border-radius:16px;
+  padding:16px 18px 14px;
+  transition:border-color .2s,box-shadow .2s;
+  position:relative;
+  border:2.5px solid transparent;
+}
+/* Per-card colors — 6 rotating pastels */
+.q-item:nth-child(6n+1){background:#EEF4FF;border-color:#c5d6ff}
+.q-item:nth-child(6n+2){background:#FFF0F8;border-color:#ffb8de}
+.q-item:nth-child(6n+3){background:#F0FFF8;border-color:#a8f0d8}
+.q-item:nth-child(6n+4){background:#FFFBEC;border-color:#ffe08a}
+.q-item:nth-child(6n+5){background:#F6F0FF;border-color:#d4b8ff}
+.q-item:nth-child(6n+6){background:#FFF4F0;border-color:#ffcab8}
+.q-item.correct{background:#e6fff4 !important;border-color:var(--mint) !important;box-shadow:0 0 0 3px rgba(0,212,168,.12)}
+.q-item.incorrect-flash{animation:flash-red .4s}
+@keyframes flash-red{0%,100%{}50%{background:#fff0f0 !important;border-color:var(--coral) !important}}
+.q-number{
+  position:absolute;top:-11px;left:18px;
+  color:#fff;font-size:.78rem;font-weight:800;padding:2px 10px;border-radius:20px;font-family:'Baloo 2',cursive;
+}
+.q-item:nth-child(6n+1) .q-number{background:#2E5BFF}
+.q-item:nth-child(6n+2) .q-number{background:#e91e8c}
+.q-item:nth-child(6n+3) .q-number{background:#00a882}
+.q-item:nth-child(6n+4) .q-number{background:#d4870a}
+.q-item:nth-child(6n+5) .q-number{background:#7B1FA2}
+.q-item:nth-child(6n+6) .q-number{background:#c0392b}
+
+.q-sentence{font-size:1.05rem;font-weight:700;color:var(--navy);line-height:1.7;display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding-top:4px}
+.q-blank{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:110px;height:36px;
+  background:#fff;
+  border:2.5px dashed #b0c4f0;
+  border-radius:10px;
+  padding:0 10px;
+  font-family:'Baloo 2',cursive;font-weight:700;font-size:1rem;color:var(--blue);
+  transition:all .2s;
+  white-space:nowrap;
+}
+.q-blank.filled{background:var(--blue);color:#fff;border-style:solid;border-color:var(--blue);animation:pop-in .25s cubic-bezier(.36,0,.66,-.56) both}
+.q-blank.filled-correct{background:var(--mint);border-color:var(--mint);color:#fff}
+.q-blank.filled-wrong{background:var(--coral);border-color:var(--coral);color:#fff;animation:shake-it .4s}
+@keyframes pop-in{0%{transform:scale(.7)}70%{transform:scale(1.1)}100%{transform:scale(1)}}
+@keyframes shake-it{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.q-hint{font-size:.8rem;color:#8a9ab5;margin-top:6px;font-style:italic}
+.q-hint.show-ans{font-style:normal;font-weight:700}
+
+/* ── INLINE OPTIONS inside each question ── */
+.q-options{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.q-opt{
+  font-family:'Baloo 2',cursive;font-weight:700;font-size:.93rem;
+  padding:6px 18px;border-radius:30px;border:2px solid #c8d5f8;
+  background:#fff;color:var(--navy);cursor:pointer;
+  transition:all .16s;
+  box-shadow:0 2px 0 #c8d5f8;
+  user-select:none;
+}
+.q-opt:hover:not(.used):not(.opt-ok):not(.opt-bad){transform:translateY(-2px);box-shadow:0 4px 0 #a0b8f0;border-color:var(--blue);background:#f0f5ff}
+.q-opt:active:not(.used){transform:translateY(1px)}
+.q-opt.opt-ok{background:var(--mint);border-color:#00a882;color:#fff;box-shadow:0 2px 0 #007d61;pointer-events:none}
+.q-opt.opt-bad{background:var(--coral);border-color:#c0392b;color:#fff;box-shadow:0 2px 0 #9b2020;animation:shake-it .4s}
+.q-opt.used{opacity:.35;pointer-events:none;text-decoration:line-through}
+
+/* ── SCORE BAR ── */
+.score-bar{
+  width:100%;max-width:860px;
+  margin-bottom:14px;
+  display:flex;align-items:center;gap:14px;
+}
+.score-track{flex:1;background:rgba(46,91,255,.12);border-radius:50px;height:12px;overflow:hidden}
+.score-fill{height:100%;background:linear-gradient(90deg,var(--mint),var(--sky));border-radius:50px;transition:width .5s cubic-bezier(.34,1.56,.64,1)}
+.score-text{font-family:'Baloo 2',cursive;font-weight:700;color:var(--navy);font-size:.9rem;white-space:nowrap}
+
+/* ── BOTTOM CONTROLS ── */
+.ws-footer{
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;
+  padding:18px 28px;
+  border-top:2px solid #edf2ff;
+  background:#fafcff;
+}
+.check-btn{
+  font-family:'Baloo 2',cursive;font-weight:800;font-size:1.05rem;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  color:#fff;border:none;padding:12px 30px;border-radius:50px;cursor:pointer;
+  box-shadow:0 5px 0 #1a3bb8,0 7px 20px rgba(46,91,255,.35);
+  transition:transform .1s,box-shadow .1s;
+}
+.check-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #1a3bb8}
+.check-btn:disabled{opacity:.5;cursor:not-allowed}
+.next-page-btn{
+  font-family:'Baloo 2',cursive;font-weight:800;font-size:1.05rem;
+  background:linear-gradient(135deg,var(--mint),#00a882);
+  color:#fff;border:none;padding:12px 30px;border-radius:50px;cursor:pointer;
+  box-shadow:0 5px 0 #007d61;
+  transition:transform .1s,box-shadow .1s;
+  display:none;
+  animation:wiggle 1s ease-in-out .3s infinite;
+}
+.next-page-btn:active{transform:translateY(3px)}
+@keyframes wiggle{0%,100%{transform:rotate(-1.5deg)}50%{transform:rotate(1.5deg)}}
+.q-opt.opt-selected{background:#ddeeff;border-color:var(--blue);color:var(--navy)}
+.footer-score{font-family:'Baloo 2',cursive;font-weight:700;font-size:1rem;color:#4a5a8a}
+
+/* ── FEEDBACK TOAST ── */
+.toast{
+  position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);
+  z-index:200;padding:12px 28px;border-radius:50px;font-family:'Baloo 2',cursive;font-weight:800;font-size:1.05rem;
+  box-shadow:0 8px 32px rgba(0,0,0,.25);opacity:0;pointer-events:none;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.good{background:var(--mint);color:#fff}
+.toast.bad{background:var(--coral);color:#fff}
+
+/* ── LEVEL COMPLETE OVERLAY ── */
+.lv-over{position:fixed;inset:0;z-index:300;background:rgba(15,12,41,.85);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center}
+.lv-over.show{display:flex}
+.lv-card{
+  background:#fff;border-radius:32px;padding:44px 52px;text-align:center;
+  max-width:420px;width:92%;
+  box-shadow:0 20px 80px rgba(0,0,0,.4);
+  border:4px solid var(--yellow);
+  animation:popIn .5s cubic-bezier(.36,0,.66,-.4) both;
+}
+@keyframes popIn{0%{transform:scale(.3) rotate(-8deg);opacity:0}70%{transform:scale(1.08) rotate(2deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+.lv-icon{font-size:5rem;display:block;margin-bottom:10px;animation:bob 1.5s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.lv-title{font-family:'Baloo 2',cursive;font-size:2rem;font-weight:800;color:var(--navy);margin-bottom:6px}
+.lv-score{font-size:1.05rem;color:#6b7aa8;margin-bottom:6px;font-weight:700}
+.lv-stars{display:flex;justify-content:center;gap:8px;margin:14px 0}
+.lv-star{font-size:2.4rem;opacity:0;animation:star-burst .5s cubic-bezier(.36,0,.66,-.56) forwards}
+.lv-star:nth-child(1){animation-delay:.1s}.lv-star:nth-child(2){animation-delay:.3s}.lv-star:nth-child(3){animation-delay:.5s}
+@keyframes star-burst{0%{transform:scale(0) rotate(-30deg);opacity:0}70%{transform:scale(1.4) rotate(8deg);opacity:1}100%{transform:scale(1);opacity:1}}
+.lv-sub{font-size:.92rem;color:#9aa0b8;margin-bottom:22px}
+.lv-next-btn{
+  font-family:'Baloo 2',cursive;font-weight:800;font-size:1.1rem;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  color:#fff;border:none;padding:14px 36px;border-radius:50px;cursor:pointer;
+  box-shadow:0 5px 0 #1a3bb8;transition:transform .1s,box-shadow .1s;
+}
+.lv-next-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #1a3bb8}
+
+/* ── FINAL COMPLETE ── */
+.final-card{border-color:var(--mint)}
+.fireworks-wrap{position:fixed;inset:0;pointer-events:none;z-index:250}
+.fw{position:absolute}
+.fw-p{position:absolute;width:7px;height:7px;border-radius:50%;animation:fw-go linear forwards}
+@keyframes fw-go{0%{transform:translate(0,0);opacity:1}100%{opacity:0;transform:var(--tx)}}
+
+/* ── CONFETTI ── */
+.conf-p{position:fixed;width:9px;height:9px;border-radius:2px;pointer-events:none;z-index:999;animation:conf-fall linear forwards}
+@keyframes conf-fall{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+/* Responsive */
+@media(max-width:520px){
+  .ws-body{padding:18px 16px}
+  .ws-footer{padding:14px 16px}
+  .ws-header{padding:18px 16px 14px}
+  .q-sentence{font-size:.95rem}
+  .q-blank{min-width:110px}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-layer" id="bgLayer"></div>
+<div class="grid-lines"></div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Level complete overlay -->
+<div class="lv-over" id="lvOver">
+  <div class="lv-card" id="lvCard">
+    <span class="lv-icon" id="lvIcon">🏆</span>
+    <div class="lv-title" id="lvTitle">Well done!</div>
+    <div class="lv-score" id="lvScore"></div>
+    <div class="lv-stars"><span class="lv-star">⭐</span><span class="lv-star">⭐</span><span class="lv-star">⭐</span></div>
+    <div class="lv-sub" id="lvSub"></div>
+    <button class="lv-next-btn" id="lvNextBtn">Next Worksheet →</button>
+  </div>
+</div>
+<div class="fireworks-wrap" id="fwWrap"></div>
+
+<!-- ══ NAME ENTRY SCREEN ══ -->
+<div id="nameScreen" style="position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#eef2ff 0%,#f0f8ff 100%)">
+  <div style="background:#fff;border-radius:32px;padding:44px 48px;max-width:420px;width:92%;text-align:center;box-shadow:0 20px 60px rgba(46,91,255,.15);border:3px solid rgba(46,91,255,.12)">
+    <div style="font-size:3.5rem;margin-bottom:10px">✏️</div>
+    <div style="font-family:'Baloo 2',cursive;font-size:1.5rem;font-weight:800;color:#1B2B5E;margin-bottom:4px">Welcome!</div>
+    <div style="font-size:.9rem;color:#6b7aa8;margin-bottom:22px;font-weight:600">Nitzanim School · Mrs. Yael Caspi · Grade 6 English</div>
+    <div style="font-family:'Baloo 2',cursive;font-weight:700;color:#1B2B5E;font-size:1rem;margin-bottom:10px">What is your name?</div>
+    <input id="nameInput" type="text" placeholder="Type your name here..."
+      style="width:100%;padding:13px 18px;border-radius:14px;border:2.5px solid #c8d5f8;font-family:'Baloo 2',cursive;font-size:1.1rem;color:#1B2B5E;outline:none;text-align:center;transition:border-color .2s"
+      onfocus="this.style.borderColor='#2E5BFF'"
+      onblur="this.style.borderColor='#c8d5f8'"
+      onkeydown="if(event.key==='Enter')startGame()"
+    >
+    <button onclick="startGame()"
+      style="margin-top:18px;width:100%;font-family:'Baloo 2',cursive;font-weight:800;font-size:1.1rem;background:linear-gradient(135deg,#2E5BFF,#9B5DE5);color:#fff;border:none;padding:14px;border-radius:14px;cursor:pointer;box-shadow:0 5px 0 #1a3bb8;transition:transform .1s,box-shadow .1s"
+      onmousedown="this.style.transform='translateY(3px)';this.style.boxShadow='0 2px 0 #1a3bb8'"
+      onmouseup="this.style.transform='';this.style.boxShadow='0 5px 0 #1a3bb8'"
+    >
+      Let's Start! 🚀
+    </button>
+  </div>
+</div>
+
+<div id="app" style="display:none">
+  <!-- Top bar -->
+  <div class="top-bar" style="width:100%;max-width:860px;border-radius:20px;margin-bottom:16px">
+    <div class="school-info">
+      <span class="school-name">🏫 Nitzanim School</span>
+      <span class="teacher-name">✏️ Mrs. Yael Caspi &nbsp;|&nbsp; English &nbsp;|&nbsp; Grade 6</span>
+    </div>
+    <div class="page-indicator" id="pageDots"></div>
+  </div>
+
+  <!-- Score bar -->
+  <div class="score-bar">
+    <div class="score-track"><div class="score-fill" id="scoreFill" style="width:0%"></div></div>
+    <div class="score-text" id="scoreText">0 / 0</div>
+  </div>
+
+  <!-- Worksheet -->
+  <div class="worksheet" id="worksheet">
+    <div class="ws-header">
+      <div class="ws-title">PRESENT SIMPLE QUESTIONS</div>
+      <div class="ws-subtitle" id="wsSubtitle">Worksheet 1 of 5</div>
+      <div class="ws-meta">
+        <span class="ws-badge level" id="lvBadge">Level 1</span>
+        <span class="ws-badge">Grade 6</span>
+        <span class="ws-badge">English</span>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div class="ws-instruction">
+        <span class="inst-icon">📝</span>
+        <span id="wsInstruction">Choose the correct word to complete each question.</span>
+      </div>
+      <div class="questions-list" id="questionsList"></div>
+      <div class="options-bank" id="optionsBank">
+        <div class="options-title">💡 Word Bank</div>
+        <div class="options-grid" id="optionsGrid"></div>
+      </div>
+    </div>
+    <div class="ws-footer">
+      <div class="footer-score" id="footerScore">Select an answer, then click Check ✓</div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <button class="check-btn" id="checkBtn" onclick="checkAnswers()">Check ✓</button>
+        <button class="next-page-btn" id="nextPageBtn" onclick="nextPage()">Next Page →</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="startOverWrap" style="margin-top:12px;text-align:center">
+    <button onclick="resetAll()" style="background:none;border:none;color:rgba(255,255,255,.45);font-family:'Nunito',sans-serif;font-size:.85rem;cursor:pointer;text-decoration:underline">↺ Start over</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  WORKSHEET DATA — 5 pages, 6 questions each = 30 total
+//  ALL Do/Does with WH questions, negatives, possessive pronouns
+// ══════════════════════════════════════════════
+
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyDrh4awgA2chgpAjFaqevACKZa5KpWYnGwfkpllZ2bQ4m5VS6txnzFg8iJ2M2kkhNb/exec';
+
+const PAGES = [
+  // ── PAGE 1: WH + Do / Does ──
+  {
+    level: 1,
+    title: "Worksheet 1 — WH Questions: Do / Does",
+    instruction: "Complete each WH question with Do or Does.",
+    icon: "🎯",
+    bgGrad: "linear-gradient(135deg,#1B2B5E,#2E5BFF)",
+    questions: [
+      { before: "What", blank: "do", after: "you eat for breakfast?", options: ["do","does"], correct: "do", hint: "you → do" },
+      { before: "Where", blank: "does", after: "she live?", options: ["do","does"], correct: "does", hint: "she → does" },
+      { before: "When", blank: "do", after: "they go to school?", options: ["do","does"], correct: "do", hint: "they → do" },
+      { before: "Who", blank: "does", after: "he play football with?", options: ["do","does"], correct: "does", hint: "he → does" },
+      { before: "How", blank: "do", after: "we get to the city centre?", options: ["do","does"], correct: "do", hint: "we → do" },
+      { before: "Why", blank: "does", after: "your dog bark at night?", options: ["do","does"], correct: "does", hint: "your dog → does" },
+    ],
+    bank: ["do","does"],
+  },
+
+  // ── PAGE 2: NEGATIVES — statements only (don't / doesn't) ──
+  {
+    level: 2,
+    title: "Worksheet 2 — Negatives: Don't / Doesn't",
+    instruction: "Complete each negative sentence with don't or doesn't.",
+    icon: "❌",
+    bgGrad: "linear-gradient(135deg,#7f1d1d,#e53e3e)",
+    questions: [
+      { before: "I", blank: "don't", after: "like waking up early.", options: ["don't","doesn't"], correct: "don't", hint: "" },
+      { before: "She", blank: "doesn't", after: "eat meat.", options: ["don't","doesn't"], correct: "doesn't", hint: "" },
+      { before: "They", blank: "don't", after: "play video games on weekdays.", options: ["don't","doesn't"], correct: "don't", hint: "" },
+      { before: "He", blank: "doesn't", after: "do his homework on time.", options: ["don't","doesn't"], correct: "doesn't", hint: "" },
+      { before: "We", blank: "don't", after: "have school on Saturdays.", options: ["don't","doesn't"], correct: "don't", hint: "" },
+      { before: "My cat", blank: "doesn't", after: "drink milk.", options: ["don't","doesn't"], correct: "doesn't", hint: "" },
+    ],
+    bank: ["don't","doesn't"],
+  },
+
+  // ── PAGE 3: POSSESSIVE PRONOUNS — clear subject→pronoun match ──
+  {
+    level: 3,
+    title: "Worksheet 3 — Possessive Pronouns",
+    instruction: "Choose the correct possessive pronoun.",
+    icon: "👑",
+    bgGrad: "linear-gradient(135deg,#4a1280,#9B5DE5)",
+    questions: [
+      { before: "This is Tom.", blank: "His", after: "favourite sport is football.", options: ["His","Her","Their","Our"], correct: "His", hint: "" },
+      { before: "This is Sarah.", blank: "Her", after: "best friend is Lisa.", options: ["His","Her","Their","My"], correct: "Her", hint: "" },
+      { before: "I have a dog.", blank: "My", after: "dog is very funny.", options: ["My","Your","His","Her"], correct: "My", hint: "" },
+      { before: "You have a brother.", blank: "Your", after: "brother is tall.", options: ["My","Your","Their","Our"], correct: "Your", hint: "" },
+      { before: "We are in class 6.", blank: "Our", after: "teacher is Mrs. Caspi.", options: ["My","Your","His","Our"], correct: "Our", hint: "" },
+      { before: "Tom and Lisa are friends.", blank: "Their", after: "school is in Tel Aviv.", options: ["His","Her","Their","Our"], correct: "Their", hint: "" },
+    ],
+    bank: ["His","Her","My","Your","Our","Their"],
+  },
+
+  // ── PAGE 4: NEGATIVE STATEMENTS — do/does/don't/doesn't ──
+  {
+    level: 4,
+    title: "Worksheet 4 — Mixed Negatives: Don't / Doesn't",
+    instruction: "Complete each negative sentence with don't or doesn't.",
+    icon: "🧩",
+    bgGrad: "linear-gradient(135deg,#064e3b,#059669)",
+    questions: [
+      { before: "You", blank: "don't", after: "listen in class.", options: ["do","does","don't","doesn't"], correct: "don't", hint: "" },
+      { before: "My mum", blank: "doesn't", after: "drive to work.", options: ["do","does","don't","doesn't"], correct: "doesn't", hint: "" },
+      { before: "We", blank: "don't", after: "understand the homework.", options: ["do","does","don't","doesn't"], correct: "don't", hint: "" },
+      { before: "The teacher", blank: "doesn't", after: "give tests every week.", options: ["do","does","don't","doesn't"], correct: "doesn't", hint: "" },
+      { before: "My friends", blank: "don't", after: "live near my house.", options: ["do","does","don't","doesn't"], correct: "don't", hint: "" },
+      { before: "He", blank: "doesn't", after: "speak English at home.", options: ["do","does","don't","doesn't"], correct: "doesn't", hint: "" },
+    ],
+    bank: ["do","does","don't","doesn't"],
+  },
+
+  // ── PAGE 5: Challenge — clear unambiguous subjects ──
+  {
+    level: 5,
+    title: "Worksheet 5 — Challenge Round!",
+    instruction: "Complete each sentence. Use do, does, don't, doesn't, or a possessive pronoun.",
+    icon: "🏆",
+    bgGrad: "linear-gradient(135deg,#7c3d0a,#F59E0B)",
+    questions: [
+      { before: "This is my brother. What is", blank: "his", after: "favourite food?", options: ["his","her","their","our"], correct: "his", hint: "" },
+      { before: "My sister and I", blank: "don't", after: "share a bedroom.", options: ["do","does","don't","doesn't"], correct: "don't", hint: "" },
+      { before: "Where", blank: "does", after: "she go after school?", options: ["do","does","don't","doesn't"], correct: "does", hint: "" },
+      { before: "Lisa and Tom are in my class.", blank: "Their", after: "favourite lesson is English.", options: ["His","Her","Their","My"], correct: "Their", hint: "" },
+      { before: "My dad", blank: "doesn't", after: "cook dinner on weekdays.", options: ["do","does","don't","doesn't"], correct: "doesn't", hint: "" },
+      { before: "What", blank: "do", after: "you and your friends do at the weekend?", options: ["do","does","don't","doesn't"], correct: "do", hint: "" },
+    ],
+    bank: ["his","don't","does","Their","doesn't","do"],
+  },
+];
+
+const LEVEL_MSGS = [
+  "Great start! WH questions with Do and Does ✅",
+  "Negatives done! Don't and Doesn't — no problem! ❌✅",
+  "Possessive pronouns — you've got it! 👑",
+  "Mixed questions — well handled! 🧩",
+  "AMAZING! All 5 worksheets complete! 🏆",
+];
+const TOASTS_GOOD = ["Correct! 🎉","Well done! ✅","Excellent! 🌟","You got it! 💪","Brilliant! 🔥","Perfect! ⭐"];
+const TOASTS_BAD  = ["Try again! 🔄","Not quite — check the hint! 💡","Oops! Think about the subject 🤔","Careful! Look at the subject 👀"];
+
+let currentPage = 0;
+let totalCorrect = 0;
+let totalAnswered = 0;
+let pageCorrect = 0;
+let pageChecked = false;
+let answers = [];
+let studentName = '';
+
+function R(n){return Math.floor(Math.random()*n)}
+
+// ── BUILD BACKGROUND BUBBLES ──
+function buildBg(){
+  const layer = document.getElementById('bgLayer');
+  layer.innerHTML = '';
+  const colors = ['#2E5BFF','#9B5DE5','#5BC8FF','#00D4A8','#FFD93D','#FF6B6B'];
+  for(let i=0;i<18;i++){
+    const b=document.createElement('div'); b.className='bubble';
+    const size=40+R(120);
+    b.style.cssText=`width:${size}px;height:${size}px;left:${R(100)}%;background:${colors[R(colors.length)]};animation-duration:${8+R(16)}s;animation-delay:-${R(20)}s`;
+    layer.appendChild(b);
+  }
+}
+
+// ── BUILD PAGE DOTS ──
+function buildDots(){
+  const c=document.getElementById('pageDots'); c.innerHTML='';
+  PAGES.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='page-dot'+(i===currentPage?' active':i<currentPage?' done':'');
+    c.appendChild(d);
+  });
+}
+
+// ── RENDER PAGE ──
+function renderPage(){
+  const pg = PAGES[currentPage];
+  pageCorrect=0; pageChecked=false; answers=new Array(pg.questions.length).fill(null);
+
+  // header
+  document.getElementById('wsSubtitle').textContent=`Worksheet ${currentPage+1} of ${PAGES.length}`;
+  document.getElementById('lvBadge').textContent=`Level ${pg.level}`;
+  document.querySelector('.ws-header').style.background=pg.bgGrad;
+  buildDots();
+  updateScoreBar();
+
+  // instruction
+  document.getElementById('wsInstruction').textContent=pg.instruction;
+
+  // hide global options bank — we use inline buttons now
+  document.getElementById('optionsBank').style.display='none';
+
+  // questions
+  const list=document.getElementById('questionsList');
+  list.innerHTML='';
+  pg.questions.forEach((q,i)=>{
+    const div=document.createElement('div');
+    div.className='q-item'; div.id=`qi-${i}`;
+    // build option buttons
+    const optBtns = q.options.map(opt =>
+      `<button class="q-opt" id="qopt-${i}-${opt.replace(/\s+/g,'_')}" onclick="pickOpt(${i},'${opt.replace(/'/g,"\\'")}',this)">${opt}</button>`
+    ).join('');
+    div.innerHTML=`
+      <span class="q-number">Q${i+1}</span>
+      <div class="q-sentence">
+        ${q.before ? `<span>${q.before}</span>` : ''}
+        <span class="q-blank" id="blank-${i}">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <span>${q.after}</span>
+      </div>
+      <div class="q-options">${optBtns}</div>
+    `;
+    list.appendChild(div);
+  });
+
+  // footer
+  document.getElementById('footerScore').textContent='Click an answer button in each question ✨';
+  document.getElementById('checkBtn').disabled=false;
+  document.getElementById('checkBtn').style.display='';
+  document.getElementById('nextPageBtn').style.display='none';
+
+  // worksheet animate in
+  const ws=document.getElementById('worksheet');
+  ws.style.animation='none'; ws.offsetHeight; ws.style.animation='slide-in .4s cubic-bezier(.34,1.56,.64,1) both';
+}
+
+// ── PICK OPTION (inline per question) ──
+function pickOpt(qIdx, val, btnEl){
+  if(pageChecked) return;
+  const pg=PAGES[currentPage];
+  // deselect other buttons in this question
+  const card=document.getElementById(`qi-${qIdx}`);
+  card.querySelectorAll('.q-opt').forEach(b=>b.classList.remove('opt-selected'));
+  btnEl.classList.add('opt-selected');
+  // update blank display
+  const bl=document.getElementById(`blank-${qIdx}`);
+  bl.textContent=val;
+  bl.classList.add('filled');
+  bl.classList.remove('filled-correct','filled-wrong');
+  // store answer
+  answers[qIdx]={value:val, correct: val===pg.questions[qIdx].correct};
+  const filled=answers.filter(a=>a!==null).length;
+  document.getElementById('footerScore').textContent=`${filled} / ${pg.questions.length} answered`;
+}
+
+// ── CHECK ANSWERS ──
+function checkAnswers(){
+  const pg=PAGES[currentPage];
+  let correct=0;
+  pg.questions.forEach((q,i)=>{
+    const bl=document.getElementById(`blank-${i}`);
+    const card=document.getElementById(`qi-${i}`);
+    // disable all option buttons for this question
+    card.querySelectorAll('.q-opt').forEach(b=>b.classList.add('used'));
+    if(answers[i]){
+      if(answers[i].correct){
+        correct++;
+        bl.classList.remove('filled'); bl.classList.add('filled-correct');
+        card.classList.add('correct');
+        card.querySelectorAll('.q-opt').forEach(b=>{if(b.textContent===q.correct){b.classList.remove('used');b.classList.add('opt-ok')}});
+      } else {
+        bl.classList.remove('filled'); bl.classList.add('filled-wrong');
+        card.querySelectorAll('.q-opt').forEach(b=>{
+          if(b.textContent===answers[i].value){b.classList.remove('used');b.classList.add('opt-bad')}
+          if(b.textContent===q.correct){b.classList.remove('used');b.classList.add('opt-ok')}
+        });
+        setTimeout(()=>{ bl.classList.remove('filled-wrong'); bl.classList.add('filled'); },600);
+      }
+    } else {
+      card.querySelectorAll('.q-opt').forEach(b=>{if(b.textContent===q.correct){b.classList.remove('used');b.classList.add('opt-ok')}});
+    }
+  });
+  pageCorrect=correct;
+  totalCorrect+=correct;
+  totalAnswered+=pg.questions.length;
+  window._allAnswers[currentPage] = answers.slice();
+  pageChecked=true;
+  document.getElementById('checkBtn').disabled=true;
+  updateScoreBar();
+
+  const pct=Math.round(correct/pg.questions.length*100);
+  if(correct===pg.questions.length){
+    showToast(`Perfect, ${studentName}! ${pg.questions.length}/${pg.questions.length} 🎉`,true);
+    confetti(30);
+  } else {
+    showToast(`${correct} / ${pg.questions.length} correct, ${studentName} — check the hints! 💡`, correct>=pg.questions.length/2);
+  }
+
+  document.getElementById('footerScore').textContent=`Score: ${correct} / ${pg.questions.length} (${pct}%)`;
+  document.getElementById('nextPageBtn').style.display='inline-block';
+
+  if(currentPage===PAGES.length-1){
+    document.getElementById('nextPageBtn').textContent='See Results 🏆';
+    document.getElementById('nextPageBtn').onclick=showFinalResult;
+  }
+}
+
+// ── SCORE BAR ──
+function updateScoreBar(){
+  const total=PAGES.reduce((s,p)=>s+p.questions.length,0);
+  const pct=total>0?totalCorrect/total*100:0;
+  document.getElementById('scoreFill').style.width=pct+'%';
+  document.getElementById('scoreText').textContent=`${totalCorrect} / ${totalAnswered}`;
+}
+
+// ── NEXT PAGE ──
+function nextPage(){
+  if(currentPage<PAGES.length-1){
+    // show level complete for this page
+    showLvComplete(false);
+  }
+}
+function showLvComplete(isFinal){
+  const pg=PAGES[currentPage];
+  const pct=pageCorrect/pg.questions.length;
+  let icon='🎯', title='Well done!', sub=LEVEL_MSGS[currentPage]||'';
+  if(pct===1){icon='🏆';title=`Perfect, ${studentName}!`}
+  else if(pct>=.67){icon='🌟';title=`Great job, ${studentName}!`}
+  else{icon='💪';title=`Keep going, ${studentName}!`}
+
+  document.getElementById('lvIcon').textContent=icon;
+  document.getElementById('lvTitle').textContent=title;
+  document.getElementById('lvScore').textContent=`You got ${pageCorrect} out of ${pg.questions.length} correct`;
+  document.getElementById('lvSub').textContent=sub;
+  // reset star anim
+  document.querySelectorAll('.lv-star').forEach(s=>{s.style.animation='none';s.offsetHeight;s.style.animation=''});
+
+  const btn=document.getElementById('lvNextBtn');
+  if(currentPage<PAGES.length-1){
+    btn.textContent=`Next: ${PAGES[currentPage+1].title} →`;
+    btn.onclick=()=>{
+      document.getElementById('lvOver').classList.remove('show');
+      currentPage++;
+      renderPage();
+    };
+  } else {
+    btn.textContent='See All Results 🏆';
+    btn.onclick=showFinalResult;
+  }
+  document.getElementById('lvOver').classList.remove('show');
+  document.getElementById('lvCard').className='lv-card';
+  requestAnimationFrame(()=>{
+    document.getElementById('lvOver').classList.add('show');
+  });
+  confetti(25);
+}
+
+async function saveResults(){
+  const totalQs = PAGES.reduce((s,p)=>s+p.questions.length,0);
+  const grade = Math.round(totalCorrect/totalQs*100);
+  const record = {
+    name: studentName,
+    date: new Date().toISOString(),
+    score: totalCorrect,
+    total: totalQs,
+    grade: grade,
+    pages: PAGES.map((pg,pi)=>({
+      title: pg.title,
+      questions: pg.questions.map((q,qi)=>({
+        sentence: `${q.before} ___ ${q.after}`,
+        correct: q.correct,
+        answered: (window._allAnswers&&window._allAnswers[pi]&&window._allAnswers[pi][qi]!=null)?window._allAnswers[pi][qi].value:null,
+        isCorrect: (window._allAnswers&&window._allAnswers[pi]&&window._allAnswers[pi][qi]!=null)?window._allAnswers[pi][qi].correct:false,
+      }))
+    }))
+  };
+  try {
+    await fetch(SHEETS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(record)
+    });
+  } catch(e){ console.log('Save failed',e); }
+}
+
+function showFinalResult(){
+  saveResults();
+  document.getElementById('lvOver').classList.remove('show');
+  const totalQs = PAGES.reduce((s,p)=>s+p.questions.length, 0); // 30
+  const grade = Math.round(totalCorrect / totalQs * 100);
+
+  let icon, title, sub, gradeLabel;
+  if(grade === 100){
+    icon='👑'; title=`מצטיין/ת, ${studentName}! 🎉`;
+    gradeLabel='מצטיין';
+    sub=`You got every single question right! You are a Present Simple CHAMPION!`;
+  } else if(grade >= 90){
+    icon='🏆'; title=`Excellent, ${studentName}!`;
+    gradeLabel='מצטיין';
+    sub=`Outstanding work — nearly perfect!`;
+  } else if(grade >= 80){
+    icon='🌟'; title=`Great work, ${studentName}!`;
+    gradeLabel='טוב מאוד';
+    sub=`Really strong performance! Keep it up!`;
+  } else if(grade >= 70){
+    icon='😊'; title=`Good job, ${studentName}!`;
+    gradeLabel='טוב';
+    sub=`Solid effort! Review the hints and try again to improve.`;
+  } else if(grade >= 60){
+    icon='💪'; title=`Keep going, ${studentName}!`;
+    gradeLabel='מספיק';
+    sub=`You are getting there! A little more practice and you will shine.`;
+  } else {
+    icon='📖'; title=`Don't give up, ${studentName}!`;
+    gradeLabel='לא מספיק';
+    sub=`Review the worksheets and try again — you can do it!`;
+  }
+
+  document.getElementById('lvIcon').textContent=icon;
+  document.getElementById('lvTitle').textContent=title;
+  document.getElementById('lvScore').innerHTML=
+    `<div style="font-size:2.5rem;font-weight:900;color:#2E5BFF;margin:6px 0">${grade}</div>` +
+    `<div style="font-size:1rem;color:#6b7aa8">${totalCorrect} / ${totalQs} correct</div>` +
+    `<div style="margin-top:6px;display:inline-block;background:#2E5BFF;color:#fff;font-family:'Baloo 2',cursive;font-weight:800;padding:4px 20px;border-radius:20px;font-size:1rem">${gradeLabel}</div>`;
+  document.getElementById('lvSub').textContent=sub;
+  document.getElementById('lvCard').classList.add('final-card');
+  document.querySelectorAll('.lv-star').forEach(s=>{s.style.animation='none';s.offsetHeight;s.style.animation=''});
+  const btn=document.getElementById('lvNextBtn');
+  btn.textContent='✅ הגשת סיימה!';
+  btn.style.background='linear-gradient(135deg,var(--mint),#00a882)';
+  btn.style.cursor='default';
+  btn.onclick=null;
+  document.getElementById('lvOver').classList.add('show');
+  confetti(60); launchFireworks();
+}
+
+// ── TOAST ──
+let toastTimer=null;
+function showToast(msg, good){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast show '+(good?'good':'bad');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+// ── CONFETTI ──
+function confetti(n){
+  const cols=['#FFD93D','#FF6B6B','#5BC8FF','#00D4A8','#9B5DE5','#2E5BFF','#fff'];
+  for(let i=0;i<n;i++){
+    const el=document.createElement('div'); el.className='conf-p';
+    el.style.cssText=`left:${10+R(80)}vw;top:-10px;background:${cols[R(cols.length)]};border-radius:${R(2)?'50%':'2px'};animation-duration:${.8+Math.random()*.9}s;animation-delay:${Math.random()*.4}s`;
+    document.body.appendChild(el); setTimeout(()=>el.remove(),1800);
+  }
+}
+
+// ── FIREWORKS ──
+function launchFireworks(){
+  const wrap=document.getElementById('fwWrap'); wrap.innerHTML='';
+  const cols=['#FFD93D','#FF6B6B','#5BC8FF','#00D4A8','#9B5DE5','#2E5BFF','#fff'];
+  for(let f=0;f<8;f++){
+    setTimeout(()=>{
+      const fw=document.createElement('div'); fw.className='fw';
+      const x=10+R(80), y=5+R(60);
+      fw.style.cssText=`left:${x}%;top:${y}%`;
+      for(let p=0;p<20;p++){
+        const part=document.createElement('div'); part.className='fw-p';
+        const ang=(p/20)*360*Math.PI/180;
+        const dist=60+R(70);
+        const tx=`translate(${Math.cos(ang)*dist}px,${Math.sin(ang)*dist}px)`;
+        part.style.cssText=`background:${cols[R(cols.length)]};--tx:${tx};animation-duration:${.6+Math.random()*.5}s;animation-delay:${Math.random()*.1}s`;
+        fw.appendChild(part);
+      }
+      wrap.appendChild(fw); setTimeout(()=>fw.remove(),1200);
+    },f*300);
+  }
+}
+
+// ── TRACK ALL ANSWERS ──
+if(!window._allAnswers) window._allAnswers = {};
+
+// ── START GAME (from name screen) ──
+function startGame(){
+  const input=document.getElementById('nameInput');
+  studentName=input.value.trim()||'Student';
+  window._allAnswers={};
+  document.getElementById('nameScreen').style.display='none';
+  document.getElementById('app').style.display='flex';
+  document.getElementById('startOverWrap').style.display='none';
+  buildBg();
+  renderPage();
+}
+
+// ── RESET (disabled after finish) ──
+function resetAll(){
+  // intentionally disabled — one attempt per student
+}
+
+// ── INIT ──
+buildBg();
+</script>
+</body>
+</html>
