@@ -363,31 +363,23 @@ td{padding:11px 14px;font-size:.85rem;vertical-align:middle}
 </main>
 
 <script>
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwwpB9XoxNtl4pdK8mf334RZcARmlKf1idzd0XHGZOCguBvp71qW4sq1VWKLt1GPmKStQ/exec';
+
 /* ── DATA ── */
 async function getAllResults(){
   try{
-    const keys=await window.storage.list('result:',true);
-    if(!keys||!keys.keys||keys.keys.length===0) return [];
-    const records=[];
-    for(const k of keys.keys){
-      try{
-        const r=await window.storage.get(k,true);
-        if(r&&r.value) records.push(JSON.parse(r.value));
-      }catch(e){}
-    }
-    return records;
+    const res = await fetch(SHEETS_URL);
+    const data = await res.json();
+    return data.map(r => ({
+      ...r,
+      date: new Date(r.date).toISOString(),
+      pages: typeof r.pages === 'string' ? JSON.parse(r.pages) : r.pages
+    }));
   }catch(e){return []}
 }
 
 async function clearAllData(){
-  if(!confirm('למחוק את כל הנתונים?')) return;
-  try{
-    const keys=await window.storage.list('result:',true);
-    if(keys&&keys.keys){
-      for(const k of keys.keys){ try{await window.storage.delete(k,true)}catch(e){} }
-    }
-    loadData();
-  }catch(e){}
+  alert('למחיקת נתונים — פתח את Google Sheets ומחק את השורות ידנית.');
 }
 
 /* ── HELPERS ── */
