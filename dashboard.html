@@ -364,35 +364,35 @@ td{padding:11px 14px;font-size:.85rem;vertical-align:middle}
 
 <script>
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxQDh2Y3IfKQmeAMzt9mdtjAU4cZuqU15PilI9pKxFGQ6FS08FpvtAqnQUxkRWjppP_XQ/exec';
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/1Bh_RsRR6s8wty7gsALskw2fxcZYR6FTxt1fft1pWQNk/gviz/tq?tqx=out:csv&sheet=Sheet1';
 
 /* ── DATA ── */
-function getAllResults(){
-  return new Promise((resolve) => {
-    const cbName = 'cb_' + Date.now();
-    window[cbName] = function(data){
-      document.getElementById(cbName).remove();
-      delete window[cbName];
+async function getAllResults(){
+  try{
+    const res = await fetch(CSV_URL + '&t=' + Date.now());
+    const text = await res.text();
+    const rows = text.trim().split('\n').slice(0);
+    const results = [];
+    for(const row of rows){
+      const cols = row.match(/(".*?"|[^,]+)(?=,|$)/g) || [];
+      const clean = cols.map(c => c.replace(/^"|"$/g,'').replace(/""/g,'"'));
+      if(!clean[1]) continue;
       try{
-        const results = (Array.isArray(data) ? data : [])
-          .filter(r => r.name)
-          .map(r => ({
-            ...r,
-            score: Number(r.score) || 0,
-            total: Number(r.total) || 30,
-            grade: Number(r.grade) || 0,
-            date: r.date ? new Date(r.date).toISOString() : new Date().toISOString(),
-            pages: typeof r.pages === 'string' ? JSON.parse(r.pages) : (r.pages || [])
-          }));
-        resolve(results);
-      } catch(e){ resolve([]); }
-    };
-    const script = document.createElement('script');
-    script.id = cbName;
-    script.src = SHEETS_URL + '?callback=' + cbName + '&t=' + Date.now();
-    script.onerror = () => { resolve([]); };
-    document.head.appendChild(script);
-    setTimeout(() => { try{ document.getElementById(cbName)?.remove(); }catch(e){} resolve([]); }, 8000);
-  });
+        results.push({
+          date: clean[0] ? new Date(clean[0]).toISOString() : new Date().toISOString(),
+          name: clean[1] || '',
+          score: Number(clean[2]) || 0,
+          total: Number(clean[3]) || 30,
+          grade: Number(clean[4]) || 0,
+          pages: JSON.parse(clean[5] || '[]')
+        });
+      }catch(e){}
+    }
+    return results;
+  }catch(e){
+    console.error('CSV load failed:', e);
+    return [];
+  }
 }
 
 async function clearAllData(){
