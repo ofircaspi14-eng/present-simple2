@@ -371,23 +371,42 @@ async function getAllResults(){
   try{
     const res = await fetch(CSV_URL + '&t=' + Date.now());
     const text = await res.text();
-    const rows = text.trim().split('\n').slice(0);
+    
+    function parseCSVRow(row){
+      const result = [];
+      let current = '';
+      let inQuotes = false;
+      for(let i = 0; i < row.length; i++){
+        const ch = row[i];
+        if(ch === '"'){
+          if(inQuotes && row[i+1] === '"'){ current += '"'; i++; }
+          else inQuotes = !inQuotes;
+        } else if(ch === ',' && !inQuotes){
+          result.push(current); current = '';
+        } else { current += ch; }
+      }
+      result.push(current);
+      return result;
+    }
+
+    const lines = text.trim().split('\n');
     const results = [];
-    for(const row of rows){
-      const cols = row.match(/(".*?"|[^,]+)(?=,|$)/g) || [];
-      const clean = cols.map(c => c.replace(/^"|"$/g,'').replace(/""/g,'"'));
-      if(!clean[1]) continue;
+    for(const line of lines){
+      if(!line.trim()) continue;
+      const cols = parseCSVRow(line);
+      if(!cols[1] || cols[1].trim() === '') continue;
       try{
         results.push({
-          date: clean[0] ? new Date(clean[0]).toISOString() : new Date().toISOString(),
-          name: clean[1] || '',
-          score: Number(clean[2]) || 0,
-          total: Number(clean[3]) || 30,
-          grade: Number(clean[4]) || 0,
-          pages: JSON.parse(clean[5] || '[]')
+          date: cols[0] ? new Date(cols[0]).toISOString() : new Date().toISOString(),
+          name: cols[1].trim(),
+          score: Number(cols[2]) || 0,
+          total: Number(cols[3]) || 30,
+          grade: Number(cols[4]) || 0,
+          pages: JSON.parse(cols[5] || '[]')
         });
-      }catch(e){}
+      }catch(e){ console.log('Row parse error:', e, cols); }
     }
+    console.log('Loaded', results.length, 'results');
     return results;
   }catch(e){
     console.error('CSV load failed:', e);
